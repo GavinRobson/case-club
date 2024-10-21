@@ -20,8 +20,8 @@ export const NavButton = ({ href, label }: Props) => {
       size="sm"
       variant="outline"
       className={cn(
-        'min-w-36 h-full bg-[#0e1015] border-t-0 border-l-0 hover:text-white border-neutral-700 hover:border-b-0 transition',
-        isActive ? 'bg-[#13151b] text-white border-b-0' : 'text-[#45484e]'
+        'min-w-36 h-1/2 bg-[#0e1015] hover:text-white border-neutral-700 hover:border-b-0 transition',
+        isActive ? 'bg-[#13151b] text-white' : 'text-[#45484e]'
       )}
     >
       <Link href={href}>{label}</Link>

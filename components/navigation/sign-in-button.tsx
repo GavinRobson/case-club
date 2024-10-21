@@ -23,5 +23,5 @@ export const SignInButton = () => {
         </div>
       </Button>
     </div>
-  )
-}
+  );
+};
