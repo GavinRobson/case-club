@@ -9,30 +9,16 @@ export const populateCases = async () => {
       continue;
     }
 
-    let skins = [];
-    for (let j = 0; j < data[i].contains.length; j++) {
-      const skin_id = data[i].contains[j].id;
-      const skin = await db.skin.findUnique({ where: {skin_id} });
-      skins.push(skin);
-    }
-
-    let extraordinaries = [];
-    for (let j = 0; j < data[i].contains_rare.length; j++) {
-      const rare_skin_id = data[i].contains_rare[j].id;
-      const rare_skin = await db.skin.findUnique({ where: {skin_id: rare_skin_id} });
-      extraordinaries.push(rare_skin);
-    }
-
     await db.case.create({
       data: {
         name: data[i].name,
         description: data[i].description,
         type: data[i].type,
         first_sale_date: data[i].first_sale_date,
-        skins: skins,
         market_hash_name: data[i].market_hash_name,
-        
-
+        rental: data[i].rental,
+        image: data[i].image,
+        model_player: data[i].model_player,
       }
     })
   }

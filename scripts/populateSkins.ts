@@ -4,6 +4,8 @@ export const populateSkins = async () => {
   const response1 = await fetch('https://bymykel.github.io/CSGO-API/api/en/skins.json');
   const skins = await response1.json();
 
+  const crates = await db.case.findMany();
+
   for (var i = 0; i < skins.length; i++) {
     var baseUrl = skins[i].image.substring(0, skins[i].image.indexOf('_light_png.png'));
     const mediumUrl = baseUrl + "_medium_png.png";
@@ -33,7 +35,14 @@ export const populateSkins = async () => {
       rarity_color = skins[i].rarity.color
     }
 
-    await db.skin.create({
+    let found_case;
+    for (let j = 0; j < skins[i].crates.length; j++) {
+      found_case = crates.find(c => c.name === skins[i].crates[j].name);
+      if (!found_case) continue;
+      break;
+    }
+
+    const skin = await db.skin.create({
       data: {
         skin_id: skins[i].id,
         name: skins[i].name,
@@ -52,8 +61,10 @@ export const populateSkins = async () => {
         wears,
         team: skins[i].team.name,
         images,
+        caseId: found_case?.id
       }
     });
+    console.log(`${skin}`)
   }
 
   console.log('Done')
