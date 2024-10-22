@@ -1,5 +1,4 @@
-import { signOut } from 'next-auth/react';
-
+import React from 'react';
 import { auth } from '@/auth';
 
 import { LoggedInButton } from '@/components/navigation/logged-in-button';
@@ -7,9 +6,8 @@ import { SignInButton } from '@/components/navigation/sign-in-button';
 
 export const ProfileButton = async () => {
   const session = await auth();
-  const handleLogout = () => {
-    signOut();
-  };
+
+  console.log(session);
 
   return (
     <div className='flex items-center ml-auto px-5 h-[37px]'>

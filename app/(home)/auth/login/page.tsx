@@ -46,7 +46,7 @@ const LoginPage = () => {
       login(values).then((data) => {
         setError(data?.error);
         if (!data?.error) {
-          router.push('/');
+          router.push('/')
         }
       });
     });
