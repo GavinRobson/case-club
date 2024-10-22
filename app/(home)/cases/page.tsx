@@ -7,7 +7,7 @@ const CasesPage = async () => {
   const cases = await getAllCases();
 
   return (
-    <div className="w-screen h-full pt-10 px-96">
+    <div className="w-screen h-full px-96">
       <div className="grid grid-flow-row grid-cols-4 gap-2">
       {cases.map((crate) => (
           <CrateButton crate={crate}/>
