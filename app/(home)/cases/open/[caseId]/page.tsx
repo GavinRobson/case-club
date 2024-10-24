@@ -13,7 +13,11 @@ const OpenCasePage = async ({ params }: { params: { caseId: string } }) => {
       name: crateName,
     },
     include: {
-      skins: true,
+      skins: {
+        include: {
+          cases: true
+        }
+      }
     }
   });
 
@@ -32,7 +36,7 @@ const OpenCasePage = async ({ params }: { params: { caseId: string } }) => {
             <Image src={crate.image} alt="Crate" height={200} width={200}/>
             <span>{crate.name}</span>
             <div className='h-full flex justify-end'>
-              <CrateOpening />
+              <CrateOpening skins={crate.skins}/>
             </div>
           </div>
         </div>

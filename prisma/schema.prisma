@@ -68,7 +68,7 @@ model Case {
   image            String
   model_player     String?
 
-  skins Skin[]
+  skins Skin[] @relation("CaseSkins")
 
   updatedAt DateTime @updatedAt
 }
@@ -92,8 +92,7 @@ model Skin {
   wears        String[]
   team         String
 
-  case   Case?    @relation(fields: [caseId], references: [id])
-  caseId String?
+  cases  Case[]   @relation("CaseSkins")
   images String[]
 }
 

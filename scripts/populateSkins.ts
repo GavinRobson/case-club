@@ -27,19 +27,19 @@ export const populateSkins = async () => {
     images.push(mediumUrl, heavyUrl);
     let rarity_color = "";
     let rarity = "";
-    if (skins[i].category.name === 'Knife') {
-      rarity_color = "#eb4b4b"
+    if (skins[i].category.name === 'Knives' || skins[i].category.name === 'Gloves') {
+      rarity_color = "#ffd700"
       rarity = "Extraordinary"
     } else {
       rarity = skins[i].rarity.name;
       rarity_color = skins[i].rarity.color
     }
 
-    let found_case;
+    let found_cases = [];
     for (let j = 0; j < skins[i].crates.length; j++) {
-      found_case = crates.find(c => c.name === skins[i].crates[j].name);
+      const found_case = crates.find(c => c.name === skins[i].crates[j].name);
       if (!found_case) continue;
-      break;
+      found_cases.push({id: found_case.id})
     }
 
     const skin = await db.skin.create({
@@ -61,7 +61,9 @@ export const populateSkins = async () => {
         wears,
         team: skins[i].team.name,
         images,
-        caseId: found_case?.id
+        cases: {
+          connect: found_cases
+        }
       }
     });
     console.log(`${skin}`)

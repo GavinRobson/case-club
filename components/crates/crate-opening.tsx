@@ -1,68 +1,161 @@
 'use client';
 
-import { useState, useEffect } from 'react'
-import Image from 'next/image';
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import SkinImage from './skin-image';
+import { Separator } from '@/components/ui/separator';
+import { cn } from '@/lib/utils';
+import weighSkins from '@/functions/weigh-skins';
+import { useRef } from 'react'
+import { Volume2, VolumeOff } from 'lucide-react';
 
-interface Skin {
-  id: number;
-  image: string;
-}
+const CrateOpening = ({ skins }: { skins: any }) => {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-const skins = [
-  { id: 1, image: "https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/default_generated/weapon_sg556_so_purple_light_png.png" },
-  { id: 2, image: "https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/default_generated/weapon_aug_hy_feathers_aug_light_png.png" },
-  { id: 3, image: "https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/default_generated/weapon_m4a1_silencer_am_zebra_dark_light_png.png" }
-]
-
-const CrateOpening = () => {
-  const [rolling, setRolling] = useState(false);
+  const [muted, setMuted] = useState(false);
+  const [rollState, setRollState] = useState({rolling: false, rolled: false});
   const [selectedItem, setSelectedItem] = useState<any>(null);
+  const [imagesArr, setImagesArr] = useState<any>(null);
+  const [land, setLand] = useState(0);
+  const [audio, setAudio] = useState('');
+  const [goAudio, setGoAudio] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
 
-  const startRoll = () => {
-    setRolling(true);
-    setSelectedItem(null)
-    setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * skins.length);
-      setSelectedItem(skins[randomIndex]);
-      setRolling(false);
-    }, 3000)
+  const weightedSkins = weighSkins(skins);
+
+  let numKnives = 0;
+  skins.map((skin: any) => {
+    if (skin.category === 'Knives' || skin.category === 'Gloves') {
+      numKnives++;
+    }
+  })
+
+  let weaponSkins: any = [];
+  skins.map((skin: any) => {
+    if (skin.category === 'Knives' || skin.category === 'Gloves') {
+      null;
+    } else {
+      weaponSkins.push(skin)
+    }
+
+  })
+
+  const changeMute = () => {
+    setMuted(!muted);
   }
 
-  return ( 
-    <div className='flex flex-col items-center justify-center p-6'>
-      <div className='w-96 overflow-hidden border-2 border-gray-300 rounded-lg mb-4'>
-        <motion.div 
-          className="flex"
-          animate={{ 
-            x: rolling ? ['0%', '-100%', '-200%', '-100%'] : '0%',
-           }}
-          transition={{
-            duration: 2.5,
-            repeat: rolling ? Infinity : 0
-          }}
-        >
-          {skins.map((skin, index) => (
-            <div className='flex shrink-0 w-full text-center' key={index}>
-              <Image src={skin.image} alt={'Skin'} width={200} height={200}/>
-            </div>
-          ))}
+  useEffect(() => {
+    if (!muted) {
+      if (audioRef.current) {
+        
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+        audioRef.current.play();
+      }
+    } else {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    
+}
+  }, [goAudio, muted])
 
-        </motion.div>
-      </div>
-      <button
-        className={`px-6 py-2 text-lg font-semibold rounded-md ${rolling ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
-        onClick={startRoll}
-        disabled={rolling}
-      >
-        {rolling ? 'Rolling...' : 'Open Case'}
-      </button>
-      {selectedItem && !rolling && (
-        <div className="mt-6 text-center">
-          <h3 className="text-xl font-bold">You got: {selectedItem.name}</h3>
-          <img className="w-48 h-48 mx-auto mt-2" src={selectedItem.image} alt={selectedItem.name} />
+  const startRoll = () => {
+    setRollState({ rolling: false, rolled: false })
+    setSelectedItem(null);
+
+    const wonSkin = getWonSkin(weightedSkins, 100000);
+    const landNum = 965 + Math.floor(Math.random() * 19);
+    setLand(landNum)
+
+    const images = getImages(wonSkin);
+    setImagesArr(images);
+
+    setRollState({rolling: true, rolled: false});
+
+    if (wonSkin.rarity_name === 'Extraordinary') {
+      setGoAudio(!goAudio);
+      setAudio('/sfx/knife_win.mp3')
+    } else {
+      setGoAudio(!goAudio);
+      setAudio('/sfx/mil_spec_win.mp3')
+    }
+
+    setTimeout(() => {
+      setRollState({rolling: false, rolled: true}) 
+      setSelectedItem(wonSkin)
+  } , 6000);
+  }
+  
+  function getWonSkin(skins: any, odds: number) {
+    const random = Math.floor(Math.random() * odds);
+    let wonSkin = null;
+    for (let i = 0; i < skins.length; i++) {
+      if (random >= skins[i].min_odds && random <= skins[i].max_odds) {
+        wonSkin = skins[i];
+      }
+    }
+    if (skins === weightedSkins) console.log({num: random, min: wonSkin.min_odds, max: wonSkin.max_odds})
+    return wonSkin;
+  }
+
+  let weightedWeaponSkins: any = [];
+  for (let i = 0; i < weightedSkins.length; i++) {
+    if (weightedSkins[i].rarity_name !== 'Extraordinary') {
+      weightedWeaponSkins.push(weightedSkins[i])
+    }
+  }
+  const maxWeaponOdds = weightedWeaponSkins[weightedWeaponSkins.length - 1].max_odds;
+  function getImages(wonSkin: any) {
+    let images = [];
+    for (let i = 0; i < 60; i++) {
+      if (i !== 50) {
+        const skin = getWonSkin(weightedWeaponSkins, maxWeaponOdds);
+        images.push(skin);
+        continue;
+      }
+      images.push(wonSkin);
+    }
+    return images;
+  }
+
+
+  return ( 
+    <div>
+      {!muted && <Volume2 onClick={changeMute} className='absolute right-0 top-0 m-4 hover:cursor-pointer'/>}
+      {muted && <VolumeOff onClick={changeMute} className='absolute right-0 top-0 m-4 hover:cursor-pointer'/>}
+      <div className='flex flex-col items-center justify-center p-6'>
+        <div className={'w-[1000px] overflow-hidden border-2 border-gray-300 rounded-lg mb-4 items-center justify-center transition h-[154px]'}>
+          <Separator className={cn('absolute bg-orange-200 origin-center left-[50%] z-50 h-[152px]',  (!rollState.rolling && !rollState.rolled) && 'hidden')} orientation='vertical'/>
+          <motion.div 
+            className='flex'
+            animate={{
+              x: rollState.rolling ? ['0%', `-${land}%`] : rollState.rolled ? `-${land}%` : '0%',
+            }}
+            transition={{
+              duration: 6,
+              ease: 'circOut'
+
+            }}
+          >
+            {
+              imagesArr?.map((skin: any, index: any) => (
+                <SkinImage skin={skin} index={index}/>
+              ))
+            }
+          </motion.div>
         </div>
-      )}
+        <span>{selectedItem?.name}</span>
+        <button
+          className={`px-6 py-2 text-lg font-semibold rounded-md ${rollState.rolling ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
+          onClick={startRoll}
+          disabled={rollState.rolling}
+        >
+          {rollState.rolling ? 'Rolling...' : 'Open Case'}
+        </button>
+        <audio ref={audioRef} src={audio} />
+      </div>
     </div>
    );
 }
