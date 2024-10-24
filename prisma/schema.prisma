@@ -59,6 +59,7 @@ model Inventory {
 
 model Case {
   id               String  @id @default(cuid())
+  case_id          String  @unique
   name             String
   description      String?
   type             String?
@@ -91,6 +92,7 @@ model Skin {
   paint_index  String?
   wears        String[]
   team         String
+  market_hash_names String[]
 
   cases  Case[]   @relation("CaseSkins")
   images String[]

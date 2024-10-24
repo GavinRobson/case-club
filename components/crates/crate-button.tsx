@@ -8,6 +8,8 @@ type Props = {
   crate: any;
 }
 
+
+
 const CrateButton = ({ crate }: Props) => {
   const router = useRouter();
   const [size, setSize] = useState(150);
@@ -16,9 +18,9 @@ const CrateButton = ({ crate }: Props) => {
   const handleMouseLeave = () => setSize(150);
 
   const onClick = () => {
-    const crateUrl = encodeURI(crate.name).replaceAll(":", "%3A");
-    
-    router.push(`/cases/open/${crateUrl}`)
+    const crateUrl = encodeURI(crate.case_id);
+    const url = `/cases/open/${crateUrl}`;
+    router.push(url);
   };
 
   return ( 
@@ -30,6 +32,7 @@ const CrateButton = ({ crate }: Props) => {
     >
       <Image src={crate.image} alt="Crate" height={size} width={size} className="drop-shadow-lg"/>
       <span>{crate.name}</span>
+      <span>{crate.price}</span>
     </div>
    );
 }

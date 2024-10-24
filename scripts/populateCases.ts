@@ -12,6 +12,7 @@ export const populateCases = async () => {
     await db.case.create({
       data: {
         name: data[i].name,
+        case_id: data[i].id,
         description: data[i].description,
         type: data[i].type,
         first_sale_date: data[i].first_sale_date,

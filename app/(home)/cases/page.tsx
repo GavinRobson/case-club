@@ -5,7 +5,19 @@ import CrateButttonSkeleton from "@/components/crates/crate-button-skeleton";
 import { getAllCases } from "@/data/cases";
 
 const CasesPage = async () => {
-  const casePromise = getAllCases();
+  const cases = await getAllCases();
+  const casesWithPrices = await Promise.all(
+    cases.map(async (crate) => {
+      const hash_name = encodeURI(crate.market_hash_name).replace(":", "%3A");
+      const response = await fetch(`https://www.steamwebapi.com/steam/api/item?key=WAERBNVBNRF04V5N&market_hash_name=${hash_name}&game=csgo`)
+      const data = await response.json();
+
+      return {
+        ...crate, 
+        price: response.ok ? data.realprice: null
+      };
+    })
+  );
 
   return (
     <div className="w-screen h-full px-96">
@@ -15,8 +27,8 @@ const CasesPage = async () => {
             <CrateButttonSkeleton key={index}/>
           ))
         }>
-          {casePromise.then(cases =>
-            cases.map(crate => <CrateButton crate={crate} key={crate.id} />)
+          {casesWithPrices.map(crate => (
+            <CrateButton crate={crate} key={crate.id} />)
           )}
         </Suspense>
       </div>

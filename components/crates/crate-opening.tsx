@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import SkinImage from './skin-image';
+import SkinImage from '@/components/crates/skin-image';
 import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/utils';
 import weighSkins from '@/functions/weigh-skins';
 import { useRef } from 'react'
-import { Volume2, VolumeOff } from 'lucide-react';
+import { Loader2, Volume2, VolumeOff } from 'lucide-react';
+import WearBar from '@/components/crates/wear-bar';
 
-const CrateOpening = ({ skins }: { skins: any }) => {
+const CrateOpening = ({ skins}: { skins: any }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [muted, setMuted] = useState(false);
@@ -17,9 +18,12 @@ const CrateOpening = ({ skins }: { skins: any }) => {
   const [selectedItem, setSelectedItem] = useState<any>(null);
   const [imagesArr, setImagesArr] = useState<any>(null);
   const [land, setLand] = useState(0);
-  const [audio, setAudio] = useState('');
+  const [audio, setAudio] = useState('/sfx/mil_spec.mp3');
   const [goAudio, setGoAudio] = useState(false);
-  const [elapsedTime, setElapsedTime] = useState(0);
+  const [skinInfo, setSkinInfo] = useState({ float: 0, wear: "", stattrak: false, pattern_id: 0, value: 0, hash_name: "" })
+  const [value, setValue] = useState(0);
+  const [gettingValue, setGettingValue] = useState(false);
+  const [show, setShow] = useState(false);
 
   const weightedSkins = weighSkins(skins);
 
@@ -64,27 +68,32 @@ const CrateOpening = ({ skins }: { skins: any }) => {
   const startRoll = () => {
     setRollState({ rolling: false, rolled: false })
     setSelectedItem(null);
+    setValue(0);
+    setShow(false);
 
     const wonSkin = getWonSkin(weightedSkins, 100000);
+    
     const landNum = 965 + Math.floor(Math.random() * 19);
     setLand(landNum)
-
+    
     const images = getImages(wonSkin);
     setImagesArr(images);
 
+    setSelectedItem(wonSkin)
+    
     setRollState({rolling: true, rolled: false});
 
-    if (wonSkin.rarity_name === 'Extraordinary') {
-      setGoAudio(!goAudio);
-      setAudio('/sfx/knife_win.mp3')
-    } else {
-      setGoAudio(!goAudio);
-      setAudio('/sfx/mil_spec_win.mp3')
-    }
+    if (wonSkin.rarity_name === 'Covert' || wonSkin.rarity_name === 'Extraordinary' || wonSkin.rarity_name === 'Classified') {
+            setGoAudio(!goAudio);
+            setAudio('/sfx/knife_win.mp3')
+          } else {
+            setGoAudio(!goAudio);
+            setAudio('/sfx/mil_spec_win.mp3')
+          }
 
-    setTimeout(() => {
+    setTimeout( async () => {
       setRollState({rolling: false, rolled: true}) 
-      setSelectedItem(wonSkin)
+      setShow(true);
   } , 6000);
   }
   
@@ -96,7 +105,6 @@ const CrateOpening = ({ skins }: { skins: any }) => {
         wonSkin = skins[i];
       }
     }
-    if (skins === weightedSkins) console.log({num: random, min: wonSkin.min_odds, max: wonSkin.max_odds})
     return wonSkin;
   }
 
@@ -106,6 +114,57 @@ const CrateOpening = ({ skins }: { skins: any }) => {
       weightedWeaponSkins.push(weightedSkins[i])
     }
   }
+
+  const getSkinValue = async () => {
+      setGettingValue(true);
+      if (selectedItem === null) {
+        setGettingValue(false);
+        return;
+      };
+
+      try {
+        const response = await fetch(`/api/getSkinValue?skin=${skinInfo.hash_name}`)
+        const data = await response.json();
+        if (response.ok) {
+          setValue(data.value)
+        } else {
+          console.error(data.message);
+        }
+      } catch (error) {
+        console.error('Failed to fetch skin value:', error)
+      } finally {
+        setGettingValue(false);
+      }
+    }
+
+  useEffect(() => {
+    getSkinValue();
+  }, [skinInfo])
+
+  useEffect(() => {
+    if (selectedItem) {
+      const float = (Math.random() * (selectedItem.max_float - selectedItem.min_float) + selectedItem.min_float).toFixed(14);
+      const pattern_id= Math.floor(Math.random() * 1000);
+      const stattrak = selectedItem.stattrak ? 9 === Math.floor(Math.random() * 10) : false
+      let wear = "";
+      if (float >= 0.0 && float < 0.07) {
+        wear = "Factory New"
+      } else if (float >= 0.07 && float < 0.15) {
+        wear = "Minimal Wear"
+      } else if (float >= 0.15 && float < 0.38) {
+        wear = "Field-Tested"
+      } else if (float >= 0.38 && float < 0.45) {
+        wear = "Well-Worn"
+      } else if (float >= 0.45 && float <= 1.00) {
+        wear = "Battle-Scarred"
+      } else {
+        wear = ""
+      }
+      const hash_name = stattrak ? `StatTrak\u2122 ${selectedItem.name} (${wear})` : `${selectedItem.name} (${wear})`;
+      setSkinInfo({ float, wear, stattrak, pattern_id, value: 0, hash_name })
+    } 
+  }, [selectedItem])
+
   const maxWeaponOdds = weightedWeaponSkins[weightedWeaponSkins.length - 1].max_odds;
   function getImages(wonSkin: any) {
     let images = [];
@@ -141,12 +200,22 @@ const CrateOpening = ({ skins }: { skins: any }) => {
           >
             {
               imagesArr?.map((skin: any, index: any) => (
-                <SkinImage skin={skin} index={index}/>
+                <SkinImage skin={skin} index={index} wear={skinInfo.wear}/>
               ))
             }
           </motion.div>
         </div>
-        <span>{selectedItem?.name}</span>
+        {(selectedItem && show) && (
+          <div>
+          <span className='text-orange-400'>{skinInfo.stattrak ? "StatTrak™ " : ""}</span>
+          <span>{selectedItem?.name} ({skinInfo.wear})</span>
+          </div>
+        )}
+        {(selectedItem && show) && <span className='pt-1'>Float: {skinInfo.float}</span>}
+        {(selectedItem && show) && <WearBar float={skinInfo.float}/>}
+        {(selectedItem && show) && <span className='pt-1'>Pattern ID: {skinInfo.pattern_id}</span>}
+        {(gettingValue && show) && <Loader2 className='animate-spin'/>}
+        {(value !== 0 && show) && <span>Value: {value}</span>}
         <button
           className={`px-6 py-2 text-lg font-semibold rounded-md ${rollState.rolling ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
           onClick={startRoll}
@@ -154,7 +223,7 @@ const CrateOpening = ({ skins }: { skins: any }) => {
         >
           {rollState.rolling ? 'Rolling...' : 'Open Case'}
         </button>
-        <audio ref={audioRef} src={audio} />
+        <audio ref={audioRef} src={audio} preload='auto'/>
       </div>
     </div>
    );
