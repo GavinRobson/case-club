@@ -9,6 +9,8 @@ import weighSkins from '@/functions/weigh-skins';
 import { useRef } from 'react'
 import { Loader2, Volume2, VolumeOff } from 'lucide-react';
 import WearBar from '@/components/crates/wear-bar';
+import saveSkins from '@/data/saveSkins';
+import { Button } from '../ui/button';
 
 const CrateOpening = ({ skins}: { skins: any }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -20,10 +22,12 @@ const CrateOpening = ({ skins}: { skins: any }) => {
   const [land, setLand] = useState(0);
   const [audio, setAudio] = useState('/sfx/mil_spec.mp3');
   const [goAudio, setGoAudio] = useState(false);
-  const [skinInfo, setSkinInfo] = useState({ float: 0, wear: "", stattrak: false, pattern_id: 0, value: 0, hash_name: "" })
-  const [value, setValue] = useState(0);
+  const [skinInfo, setSkinInfo] = useState({ float: 0, wear: "", stattrak: false, pattern_id: 0, value: 0, volume: 0, hash_name: "", id: "" })
+  const [value, setValue] = useState("");
   const [gettingValue, setGettingValue] = useState(false);
   const [show, setShow] = useState(false);
+  const [openedSkins, setOpenedSkins] = useState<any[]>([])
+  const [save, setSave] = useState(true);
 
   const weightedSkins = weighSkins(skins);
 
@@ -68,11 +72,11 @@ const CrateOpening = ({ skins}: { skins: any }) => {
   const startRoll = () => {
     setRollState({ rolling: false, rolled: false })
     setSelectedItem(null);
-    setValue(0);
+    setValue("");
     setShow(false);
 
     const wonSkin = getWonSkin(weightedSkins, 100000);
-    
+
     const landNum = 965 + Math.floor(Math.random() * 19);
     setLand(landNum)
     
@@ -84,16 +88,17 @@ const CrateOpening = ({ skins}: { skins: any }) => {
     setRollState({rolling: true, rolled: false});
 
     if (wonSkin.rarity_name === 'Covert' || wonSkin.rarity_name === 'Extraordinary' || wonSkin.rarity_name === 'Classified') {
-            setGoAudio(!goAudio);
-            setAudio('/sfx/knife_win.mp3')
-          } else {
-            setGoAudio(!goAudio);
-            setAudio('/sfx/mil_spec_win.mp3')
-          }
+      setGoAudio(!goAudio);
+      setAudio('/sfx/knife_win.mp3')
+    } else {
+      setGoAudio(!goAudio);
+      setAudio('/sfx/mil_spec_win.mp3')
+    }
 
     setTimeout( async () => {
       setRollState({rolling: false, rolled: true}) 
       setShow(true);
+      console.log(openedSkins)
   } , 6000);
   }
   
@@ -115,28 +120,33 @@ const CrateOpening = ({ skins}: { skins: any }) => {
     }
   }
 
-  const getSkinValue = async () => {
-      setGettingValue(true);
-      if (selectedItem === null) {
-        setGettingValue(false);
-        return;
-      };
-
-      try {
-        const response = await fetch(`/api/getSkinValue?skin=${skinInfo.hash_name}`)
-        const data = await response.json();
-        console.log(data);
-        if (response.ok) {
-          setValue(data.value)
-        } else {
-          console.error(data.message);
-        }
-      } catch (error) {
-        console.error('Failed to fetch skin value:', error)
-      } finally {
-        setGettingValue(false);
-      }
+  useEffect(() => {
+    if (openedSkins[0]?.skin && save) {
+      saveSkins(openedSkins[0].skin, openedSkins[0].wear, openedSkins[0].float, openedSkins[0].pattern_id, openedSkins[0].stattrak, openedSkins[0].market_hash_name)
     }
+  }, [openedSkins])
+
+  const getSkinValue = async () => {
+    setGettingValue(true);
+    if (selectedItem === null) {
+      setGettingValue(false);
+      return;
+    };
+
+    try {
+      const response = await fetch(`/api/getSkinValue?skin=${skinInfo.hash_name}`)
+      const data = await response.json();
+      if (response.ok) {
+        setValue(data.value)
+      } else {
+        console.error(data.message);
+      }
+    } catch (error) {
+      console.error('Failed to fetch skin value:', error)
+    } finally {
+      setGettingValue(false);
+    }
+  }
 
   useEffect(() => {
     getSkinValue();
@@ -162,7 +172,8 @@ const CrateOpening = ({ skins}: { skins: any }) => {
         wear = ""
       }
       const hash_name = stattrak ? `StatTrak\u2122 ${selectedItem.name} (${wear})` : `${selectedItem.name} (${wear})`;
-      setSkinInfo({ float, wear, stattrak, pattern_id, value: 0, hash_name })
+      setSkinInfo({ float, wear, stattrak, pattern_id, value: 0, volume: 0, hash_name, id: selectedItem.skin_id })
+      setOpenedSkins([{ skin: selectedItem, wear, float, pattern_id, stattrak, market_hash_name: hash_name }])
     } 
   }, [selectedItem])
 
@@ -180,11 +191,22 @@ const CrateOpening = ({ skins}: { skins: any }) => {
     return images;
   }
 
+  const changeSave = () => {
+    setSave(!save)
+  }
+
 
   return ( 
     <div>
       {!muted && <Volume2 onClick={changeMute} className='absolute right-0 top-0 m-4 hover:cursor-pointer'/>}
       {muted && <VolumeOff onClick={changeMute} className='absolute right-0 top-0 m-4 hover:cursor-pointer'/>}
+      <div className='absolute left-0 top-0 m-4'>
+        <div className='flex items-center'>
+          <span className=''>Currently:</span>
+          {save && <Button variant='green' onClick={changeSave} className='ml-2'>Saving to Inventory</Button>}
+          {!save && <Button variant='destructive' onClick={changeSave} className='ml-2'>Not Saving</Button>}
+        </div>
+      </div>
       <div className='w-screen flex flex-col items-center justify-center p-6'>
           <div className={'w-[1000px] overflow-hidden border-2 border-gray-300 rounded-lg mb-4 items-center justify-center transition h-[154px]'}>
             <Separator className={cn('absolute bg-orange-200 origin-center left-[50%] z-50 h-[152px]',  (!rollState.rolling && !rollState.rolled) && 'hidden')} orientation='vertical'/>
@@ -216,7 +238,7 @@ const CrateOpening = ({ skins}: { skins: any }) => {
         {(selectedItem && show) && <WearBar float={skinInfo.float}/>}
         {(selectedItem && show) && <span className='pt-1'>Pattern ID: {skinInfo.pattern_id}</span>}
         {(gettingValue && show) && <Loader2 className='animate-spin'/>}
-        {(value !== 0 && show) && <span>Value: {value}</span>}
+        {(value && show) && <span>Value: {value}</span>}
         <button
           className={`px-6 py-2 text-lg font-semibold rounded-md ${rollState.rolling ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
           onClick={startRoll}

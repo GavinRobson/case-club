@@ -23,13 +23,20 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: 'Email taken' };
   }
 
-  await db.user.create({
+  const user = await db.user.create({
     data: {
       name: username,
       email,
       password: hashedPassword,
     },
   });
+
+  await db.inventory.create({
+    data: {
+      updatedAt: new Date(),
+      userId: user.id
+    }
+  })
 
   return { success: 'Success!' };
 };

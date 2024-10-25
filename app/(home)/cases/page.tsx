@@ -13,7 +13,7 @@ const CasesPage = async () => {
 
       return {
         ...crate, 
-        price: response.ok ? data.realprice: null
+        price: response.ok ? data.median_price : null
       };
     })
   );

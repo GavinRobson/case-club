@@ -23,6 +23,7 @@ model User {
   password      String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  spent Float?
 
   account Account[]
 
@@ -50,8 +51,9 @@ model Account {
 
 model Inventory {
   id        String   @id @default(cuid())
-  data      Json
   updatedAt DateTime @updatedAt
+
+  inventorySkin InventorySkin[]
 
   user   User   @relation(fields: [userId], references: [id])
   userId String @unique
@@ -94,8 +96,31 @@ model Skin {
   team         String
   market_hash_names String[]
 
+  inventorySkins InventorySkin[]
   cases  Case[]   @relation("CaseSkins")
   images String[]
+}
+
+model InventorySkin {
+  id String @id @default(cuid())
+  name String
+  wear String
+  float Float
+  pattern_id Int
+  stattrak Boolean
+  market_hash_name String
+  image String
+  value String?
+  quantity String?
+
+  opened_at DateTime  @default(now())
+  updated_at DateTime @updatedAt
+
+  inventory Inventory @relation(fields: [inventory_id], references: [id])
+  inventory_id String
+
+  skin Skin @relation(fields: [skin_id], references: [id])
+  skin_id String
 }
 
 model VerificationToken {
