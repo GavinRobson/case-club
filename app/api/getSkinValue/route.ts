@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   try {
     const response = await fetch (`https://steamcommunity.com/market/priceoverview/?current=1&appid=730&market_hash_name=${market_hash_name}`)
     const skin = await response.json();
-    console.log(skin);
+
     if (!skin) {
       return NextResponse.json({ message: 'Skin not found' }, { status: 404 });
     }

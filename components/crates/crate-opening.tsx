@@ -125,6 +125,7 @@ const CrateOpening = ({ skins}: { skins: any }) => {
       try {
         const response = await fetch(`/api/getSkinValue?skin=${skinInfo.hash_name}`)
         const data = await response.json();
+        console.log(data);
         if (response.ok) {
           setValue(data.value)
         } else {
@@ -184,27 +185,27 @@ const CrateOpening = ({ skins}: { skins: any }) => {
     <div>
       {!muted && <Volume2 onClick={changeMute} className='absolute right-0 top-0 m-4 hover:cursor-pointer'/>}
       {muted && <VolumeOff onClick={changeMute} className='absolute right-0 top-0 m-4 hover:cursor-pointer'/>}
-      <div className='flex flex-col items-center justify-center p-6'>
-        <div className={'w-[1000px] overflow-hidden border-2 border-gray-300 rounded-lg mb-4 items-center justify-center transition h-[154px]'}>
-          <Separator className={cn('absolute bg-orange-200 origin-center left-[50%] z-50 h-[152px]',  (!rollState.rolling && !rollState.rolled) && 'hidden')} orientation='vertical'/>
-          <motion.div 
-            className='flex'
-            animate={{
-              x: rollState.rolling ? ['0%', `-${land}%`] : rollState.rolled ? `-${land}%` : '0%',
-            }}
-            transition={{
-              duration: 6,
-              ease: 'circOut'
+      <div className='w-screen flex flex-col items-center justify-center p-6'>
+          <div className={'w-[1000px] overflow-hidden border-2 border-gray-300 rounded-lg mb-4 items-center justify-center transition h-[154px]'}>
+            <Separator className={cn('absolute bg-orange-200 origin-center left-[50%] z-50 h-[152px]',  (!rollState.rolling && !rollState.rolled) && 'hidden')} orientation='vertical'/>
+            <motion.div 
+              className='flex'
+              animate={{
+                x: rollState.rolling ? ['0%', `-${land}%`] : rollState.rolled ? `-${land}%` : '0%',
+              }}
+              transition={{
+                duration: 6,
+                ease: 'circOut'
 
-            }}
-          >
-            {
-              imagesArr?.map((skin: any, index: any) => (
-                <SkinImage skin={skin} index={index} wear={skinInfo.wear}/>
-              ))
-            }
-          </motion.div>
-        </div>
+              }}
+            >
+              {
+                imagesArr?.map((skin: any, index: any) => (
+                  <SkinImage skin={skin} index={index} wear={skinInfo.wear}/>
+                ))
+              }
+            </motion.div>
+          </div>
         {(selectedItem && show) && (
           <div>
           <span className='text-orange-400'>{skinInfo.stattrak ? "StatTrak™ " : ""}</span>

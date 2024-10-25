@@ -1,7 +1,6 @@
 import { CircleUser } from 'lucide-react';
 
 import { signOut } from '@/auth';
-import { SettingsNav } from '@/components/navigation/settings-nav';
 
 type Props = {
   username: string | undefined | null;

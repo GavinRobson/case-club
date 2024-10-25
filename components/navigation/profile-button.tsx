@@ -10,14 +10,16 @@ export const ProfileButton = async () => {
   console.log(session);
 
   return (
-    <div className='flex items-center ml-auto px-5 h-[37px]'>
-      <div className='pt-2'>
+    <div className='flex items-center ml-auto px-5 h-full'>
         {session ? (
-          <LoggedInButton username={session.user?.name} />
+          <div>
+            <LoggedInButton username={session.user?.name} />
+          </div>
         ): (
-          <SignInButton />
+          <div className='flex items-center justify-center'>
+            <SignInButton />
+          </div>
         )}
-      </div>
     </div>
   )
 }

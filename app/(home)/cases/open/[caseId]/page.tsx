@@ -28,17 +28,22 @@ const OpenCasePage = async ({ params }: { params: { caseId: string } }) => {
 
   const CrateContent = async ({ cratePromise }: { cratePromise: Promise<any> }) => {
     const crate = await cratePromise;
-    const response = await fetch(`https://steamcommunity.com/market/priceoverview/?currency=1&appid=730&market_hash_name=${crate.market_hash_name}`)
+    console.log(crate.market_hash_name)
+    const response = await fetch(`https://steamcommunity.com/market/priceoverview/?currency=1&appid=730&market_hash_name=${encodeURI(crate.market_hash_name)}`)
     const data = await response.json();
-    const cratePrice = data.median_price;
-    const crateVolume = data.volume;
+    let cratePrice = 0;
+    let crateVolume = 0;
+    if (data) {
+      cratePrice = data.median_price;
+      crateVolume = data.volume;
+    }
 
     return ( 
         <div className='absolute inset-10 flex items-center justify-center bg-slate-800 mt-24'>
           <div className='flex flex-col items-center h-full pt-10'>
             <div className='flex flex-row space-x-2'>
-              <span>Cost: {cratePrice}</span>
-              <span>Supply: {crateVolume}</span>
+              {data && <span>Cost: {cratePrice}</span>}
+              {data && <span>Supply: {crateVolume}</span>}
             </div>
             <Image src={crate.image} alt="Crate" height={200} width={200}/>
             <span>{crate.name}</span>
