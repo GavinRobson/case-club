@@ -10,7 +10,7 @@ export default function HomePageLayout({ children }: Props) {
     <>
       <Header />
       <MobileHeader />
-      <main className="px-14">{children}</main>
+      <main>{children}</main>
     </>
   )
 }

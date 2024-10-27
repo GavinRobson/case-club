@@ -30,7 +30,7 @@ const CrateButton = ({ crate }: Props) => {
     >
       <Image src={crate.image} alt="Crate" height={size} width={size} className="drop-shadow-lg"/>
       <span>{crate.name}</span>
-      <span>{crate.price}</span>
+      <span>${crate.value.toFixed(2)}</span>
     </div>
    );
 }

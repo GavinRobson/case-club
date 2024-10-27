@@ -66,6 +66,14 @@ export const getTotalEarned = async (id: string | undefined) => {
       const value = parseFloat(items[i].value!.replace(/[^0-9.]/g, ''));
       totalEarned += value;
     } 
+    await db.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        earned: totalEarned
+      }
+    })
     return totalEarned;
   } catch (error) {
     return null;

@@ -4,20 +4,25 @@ import { auth } from '@/auth';
 import { LoggedInButton } from '@/components/navigation/logged-in-button';
 import { SignInButton } from '@/components/navigation/sign-in-button';
 import { getTotalEarned } from '@/data/user';
+import { db } from '@/lib/db';
 
 export const ProfileButton = async () => {
   const session = await auth();
-
-  let earned: number | null = 0;
   if (session) {
-    earned = await getTotalEarned(session?.user?.id)
+    await getTotalEarned(session?.user?.id)
   }
 
+  const user = await db.user.findUnique({
+    where: {
+      id: session?.user?.id,
+    }
+  })
+
   return (
-      <div className='flex items-center ml-auto px-5 h-full'>
+      <div className='flex items-center ml-auto px-5 h-full z-50'>
           {session ? (
             <div>
-              <LoggedInButton username={session.user?.name} earned={earned}/>
+              <LoggedInButton username={session.user?.name} earned={user?.earned} spent={user?.spent}/>
             </div>
           ): (
             <div className='flex items-center justify-center'>

@@ -12,7 +12,7 @@ import WearBar from '@/components/crates/wear-bar';
 import saveSkins from '@/data/saveSkins';
 import { Button } from '../ui/button';
 
-const CrateOpening = ({ skins}: { skins: any }) => {
+const CrateOpening = ({ skins, crateValue }: { skins: any, crateValue: number }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [muted, setMuted] = useState(false);
@@ -122,7 +122,7 @@ const CrateOpening = ({ skins}: { skins: any }) => {
 
   useEffect(() => {
     if (openedSkins[0]?.skin && save) {
-      saveSkins(openedSkins[0].skin, openedSkins[0].wear, openedSkins[0].float, openedSkins[0].pattern_id, openedSkins[0].stattrak, openedSkins[0].market_hash_name)
+      saveSkins(openedSkins[0].skin, openedSkins[0].wear, openedSkins[0].float, openedSkins[0].pattern_id, openedSkins[0].stattrak, openedSkins[0].market_hash_name, crateValue)
     }
   }, [openedSkins])
 

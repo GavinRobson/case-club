@@ -6,17 +6,6 @@ import { getAllCases } from "@/data/cases";
 
 const CasesPage = async () => {
   const cases = await getAllCases();
-  const casesWithPrices = await Promise.all(
-    cases.map(async (crate) => {
-      const response = await fetch(`https://steamcommunity.com/market/priceoverview/?currency=1&appid=730&market_hash_name=${crate.market_hash_name}`)
-      const data = await response.json();
-
-      return {
-        ...crate, 
-        price: response.ok ? data.median_price : null
-      };
-    })
-  );
 
   return (
     <div>
@@ -27,7 +16,7 @@ const CasesPage = async () => {
               <CrateButttonSkeleton key={index}/>
             ))
           }>
-            {casesWithPrices.map(crate => (
+            {cases.map(crate => (
               <CrateButton crate={crate} key={crate.id} />)
             )}
           </Suspense>
@@ -40,7 +29,7 @@ const CasesPage = async () => {
                 <CrateButttonSkeleton key={index}/>
               ))
             }>
-              {casesWithPrices.map(crate => (
+              {cases.map(crate => ( 
                 <CrateButton crate={crate} key={crate.id} />
               ))}
             </Suspense>

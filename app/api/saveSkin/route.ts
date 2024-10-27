@@ -19,7 +19,8 @@ export async function POST(request: Request) {
       stattrak,
       market_hash_name,
       image,
-      skin_id
+      skin_id,
+      crateValue
     } = await request.json();
 
     if (!name || !wear || !float || !pattern_id || !market_hash_name || !image) {
@@ -62,6 +63,17 @@ export async function POST(request: Request) {
         skin_id, // Assuming 'name' represents the skin ID in this context
       },
     });
+
+    await db.user.update({
+      where: {
+        id: user?.id
+      },
+      data: {
+        spent: {
+          increment: crateValue
+        }
+      }
+    })
 
     return NextResponse.json({ message: 'Skin saved successfully' }, { status: 201 });
   } catch (error: any) {

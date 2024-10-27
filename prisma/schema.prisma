@@ -23,7 +23,8 @@ model User {
   password      String?
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  spent Float?
+  spent         Float?
+  earned        Float?
 
   account Account[]
 
@@ -70,6 +71,7 @@ model Case {
   rental           Boolean
   image            String
   model_player     String?
+  value            Float?
 
   skins Skin[] @relation("CaseSkins")
 
@@ -77,49 +79,50 @@ model Case {
 }
 
 model Skin {
-  id           String   @id @default(cuid())
-  skin_id      String   @unique
-  name         String
-  description  String?
-  weapon       String
-  category     String?
-  pattern      String?
-  min_float    Float?
-  max_float    Float?
-  rarity_id    String
-  rarity_name  String
-  rarity_color String
-  stattrak     Boolean
-  souvenir     Boolean?
-  paint_index  String?
-  wears        String[]
-  team         String
+  id                String   @id @default(cuid())
+  skin_id           String   @unique
+  name              String
+  description       String?
+  weapon            String
+  category          String?
+  pattern           String?
+  min_float         Float?
+  max_float         Float?
+  rarity_id         String
+  rarity_name       String
+  rarity_color      String
+  stattrak          Boolean
+  souvenir          Boolean?
+  paint_index       String?
+  wears             String[]
+  team              String
   market_hash_names String[]
+  value             Float?
 
   inventorySkins InventorySkin[]
-  cases  Case[]   @relation("CaseSkins")
-  images String[]
+  cases          Case[]          @relation("CaseSkins")
+  images         String[]
 }
 
 model InventorySkin {
-  id String @id @default(cuid())
-  name String
-  wear String
-  float Float
-  pattern_id Int
-  stattrak Boolean
+  id               String  @id @default(cuid())
+  name             String
+  wear             String
+  float            Float
+  pattern_id       Int
+  stattrak         Boolean
   market_hash_name String
-  image String
-  value String?
-  quantity String?
+  image            String
+  value            String?
+  quantity         String?
 
-  opened_at DateTime  @default(now())
+  opened_at  DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  inventory Inventory @relation(fields: [inventory_id], references: [id])
+  inventory    Inventory @relation(fields: [inventory_id], references: [id])
   inventory_id String
 
-  skin Skin @relation(fields: [skin_id], references: [id])
+  skin    Skin   @relation(fields: [skin_id], references: [id])
   skin_id String
 }
 

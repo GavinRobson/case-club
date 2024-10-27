@@ -1,9 +1,10 @@
 import { populateMarketHashName } from "@/scripts/populateMarketHashName";
 import { populateSkins } from "@/scripts/populateSkins";
+import { populateCaseValues } from "@/scripts/populateValues";
 import { redirect } from "next/navigation";
 
 const PopulatePage = async () => {
-  await populateMarketHashName();
+  await populateCaseValues();
   redirect('/');
   return ( 
     <div>

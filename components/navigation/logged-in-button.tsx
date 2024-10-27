@@ -4,15 +4,16 @@ import { signOut } from '@/auth';
 
 type Props = {
   username: string | undefined | null;
-  earned: number | null
+  earned: number | null | undefined;
+  spent: number | null | undefined
 };
 
-export const LoggedInButton = ({ username, earned }: Props) => {
+export const LoggedInButton = ({ username, earned, spent }: Props) => {
 
 
   return (
     <div className="relative group">
-      <div className="text-gray-600 group-hover:text-gray-400 transition cursor-pointer peer z-20">
+      <div className="text-gray-600 group-hover:text-gray-400 transition cursor-pointer peer z-99">
         <CircleUser />
       </div>
       <div className="bg-[#262830] hidden min-w-[162px] peer-hover:flex group-hover:flex absolute right-0 mt-2 shadow-lg rounded-[0.25rem]">
@@ -28,7 +29,10 @@ export const LoggedInButton = ({ username, earned }: Props) => {
             <div className="text-white px-4 cursor-default">{username}</div>
             <hr className="w-full my-2 border-t border-[#808080]" />
             <div className=" text-white/50 py-1 px-4 hover:text-white hover:bg-white/30 hover:outline hover:outline-1 cursor-pointer transition rounded-[0.25rem]">
-              <span>Total Earned: ${earned}</span>
+              <span>Total Spent: ${spent?.toFixed(2)}</span>
+            </div>
+            <div className=" text-white/50 py-1 px-4 hover:text-white hover:bg-white/30 hover:outline hover:outline-1 cursor-pointer transition rounded-[0.25rem]">
+              <span>Total Earned: ${earned?.toFixed(2)}</span>
             </div>
             <div className=" text-white/50 py-1 px-4 hover:text-white hover:bg-white/30 hover:outline hover:outline-1 cursor-pointer transition rounded-[0.25rem]">
               <button type="submit">Log Out</button>

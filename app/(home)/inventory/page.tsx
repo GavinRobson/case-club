@@ -7,6 +7,7 @@ import NoItemRedirect from "@/components/inventory/no-item-redirect";
 
 const InventoryPage = async () => {
   const session = await auth();
+
   if (!session) {
     return (
       <div>
@@ -16,6 +17,7 @@ const InventoryPage = async () => {
   }
 
   const user = await getAllItems(session.user?.id);
+  console.log(user)
   if (!user) {
     return (
       <div>
@@ -32,39 +34,44 @@ const InventoryPage = async () => {
     )
   }
 
-  const itemsWithPrices = await Promise.all(
-    items.map(async (item) => {
-      if (!item.value) {
-        const response = await fetch(`https://steamcommunity.com/market/priceoverview/?currency=1&appid=730&market_hash_name=${item.market_hash_name}`)
-        const data = await response.json();
+  let net_earnings = 0;
 
-        return {
-          ...item,
-          value: response.ok ? data.median_price : null
-        };
-      } else {
-        return {
-          ...item
-        }
-      }
-    })
-  );
+  if (user?.spent === null && user.earned === null) {
+    null;
+  } else {
+    net_earnings = user.earned! - user.spent!;
+  }
 
-  console.log(user)
 
   return ( 
     <div>
-      <div className="w-screen h-full hidden md:flex justify-center mx-auto">
-        <div className="grid grid-flow-row grid-cols-4 gap-2">
-          <Suspense fallback={
-            Array.from({ length: 12 }).map((_, index) => (
-              <ItemButtonSkeleton key={index}/>
-            ))
-          }>
-            {itemsWithPrices.map(item => (
-              <ItemButton item={item} key={item.id}/>
-            ))}
-          </Suspense>
+      <div className="hidden md:block ">
+        <span className={`w-full items-center flex justify-center pb-4 ${net_earnings > 0 ? 'text-green-500': 'text-red-500'}`}>Net Earnings: {net_earnings.toFixed(2)}</span>
+        <div className="w-screen h-full flex justify-center items-center mx-auto px-4">
+          <div className="grid grid-flow-row grid-cols-6 gap-2 max-w-screen-xl justify-items-center">
+            <Suspense fallback={
+              Array.from({ length: 12 }).map((_, index) => (
+                <ItemButtonSkeleton key={index}/>
+              ))
+            }>
+              {items.map(item => (
+                <ItemButton item={item} key={item.id}/>
+              ))}
+            </Suspense>
+          </div>
+        </div>
+      </div>
+      <div className="w-full h-full flex md:hidden justify-center mx-auto">
+        <div className="flex flex-col space-y-2">
+            <Suspense fallback={
+              Array.from({ length: 2 }).map((_, index) => (
+                <ItemButtonSkeleton key={index}/>
+              ))
+            }>
+              {items.map(item => ( 
+                <ItemButton item={item} key={item.id} />
+              ))}
+            </Suspense>
         </div>
       </div>
     </div>
