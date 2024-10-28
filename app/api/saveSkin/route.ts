@@ -13,14 +13,13 @@ export async function POST(request: Request) {
       name,
       wear,
       value,
-      volume,
       float,
       pattern_id,
       stattrak,
       market_hash_name,
       image,
       skin_id,
-      crateValue
+      crateValue,
     } = await request.json();
 
     if (!name || !wear || !float || !pattern_id || !market_hash_name || !image) {
@@ -70,6 +69,9 @@ export async function POST(request: Request) {
       data: {
         spent: {
           increment: crateValue
+        },
+        earned: {
+          increment: parseFloat(value)
         }
       }
     })

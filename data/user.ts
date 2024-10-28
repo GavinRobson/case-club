@@ -56,29 +56,16 @@ export const getTotalEarned = async (id: string | undefined) => {
     return null;
   }
   try {
-    const user = await getAllItems(id);
-    const items = user?.inventory?.inventorySkin;
-
-    if (!items || items === undefined) {
-      return 0;
-    }
-
-    let totalEarned = 0;
-    for (let i = 0; i < items.length; i++){
-      if (items[i].value === null) continue;
-
-      const value = items[i].value!;
-      totalEarned += value;
-    } 
-    await db.user.update({
+    const user = await db.user.findUnique({
       where: {
-        id: user.id,
-      },
-      data: {
-        earned: totalEarned
+        id
       }
-    })
-    return totalEarned;
+    });
+    if (!user) {
+      return null;
+    }
+    
+    return user.earned
   } catch (error) {
     return null;
   }

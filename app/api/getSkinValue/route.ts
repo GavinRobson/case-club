@@ -19,7 +19,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ value: 0.00 });
     }
     
-    const price = ((skin.objects[0].suggestedPrice.USD / 100) * .80).toFixed(2)
+    const price = ((skin.objects[0].suggestedPrice.USD / 100)).toFixed(2)
     console.log(price)
     return NextResponse.json({ value: price })
   } catch (error: any) {

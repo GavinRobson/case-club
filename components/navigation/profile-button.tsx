@@ -8,8 +8,15 @@ import { db } from '@/lib/db';
 
 export const ProfileButton = async () => {
   const session = await auth();
-  if (session) {
-    await getTotalEarned(session?.user?.id)
+
+  if (!session) {
+    return (
+      <div className='flex items-center ml-auto px-5 h-full z-50'>
+        <div className='flex items-center justify-center'>
+          <SignInButton />
+        </div>
+      </div>
+    )
   }
 
   const user = await db.user.findUnique({
@@ -20,15 +27,9 @@ export const ProfileButton = async () => {
 
   return (
       <div className='flex items-center ml-auto px-5 h-full z-50'>
-          {session ? (
-            <div>
-              <LoggedInButton username={session.user?.name} earned={user?.earned} spent={user?.spent}/>
-            </div>
-          ): (
-            <div className='flex items-center justify-center'>
-              <SignInButton />
-            </div>
-          )}
+        <div>
+          <LoggedInButton username={session.user?.name} userId={session?.user?.id}/>
+        </div>
       </div>
   )
 }

@@ -20,8 +20,8 @@ const MobileNavButton = ({ href, label }: Props) => {
       size="sm"
       variant='default'
       className={cn(
-        'w-full h-[100px] bg-gray-800 hover:text-white border border-neutral-700 hover:border-white transition',
-        isActive ? 'bg-[#13151b] text-white' : 'text-[#45484e]'
+        'w-full h-[100px] bg-gray-800 hover:text-white border border-slate-300 hover:border-white transition text-white p-2',
+        isActive ? 'bg-[#13151b]' : ''
       )}
     >
       <Link href={href}>{label}</Link>

@@ -30,18 +30,22 @@ const OpenCasePage = async ({ params }: { params: { caseId: string } }) => {
     const crate = await cratePromise;
 
     return ( 
-        <div className='absolute inset-10 flex items-center justify-center bg-slate-800 mt-24'>
-          <div className='flex flex-col items-center h-full pt-10'>
-            <div className='flex flex-row space-x-2'>
-              <span>Cost: ${crate.value.toFixed(2)}</span>
+        <div className="relative min-h-[80vh] w-[95%] flex items-center justify-center bg-slate-800 mx-auto self-center">
+          <div className="flex flex-col items-center w-full max-w-screen-lg pb-10">
+            <div className='absolute top-5'>
+              <div className='flex flex-col items-center'>
+                <span>Cost: ${crate.value.toFixed(2)}</span>
+                <Image src={crate.image} alt="Crate" height={200} width={200} className='drop-shadow-lg'/>
+                <span>{crate.name}</span>
+              </div>
             </div>
-            <Image src={crate.image} alt="Crate" height={200} width={200}/>
-            <span>{crate.name}</span>
-            <div className='h-full flex justify-end'>
-              <CrateOpening skins={crate.skins} crateValue={crate.value}/>
+            <div className="w-full justify-end mt-auto">
+              <CrateOpening skins={crate.skins} crateValue={crate.value} />
             </div>
           </div>
         </div>
+
+
     );
 }
  

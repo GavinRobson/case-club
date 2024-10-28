@@ -28,7 +28,7 @@ const NavigationSideBar = () => {
         <div className="pt-4 flex w-full items-center justify-center">
           <Menu size={30} onClick={toggleMenu} />
         </div>
-        <div className="pt-2">
+        <div className="pt-2 px-2">
           <MobileNavigation />
         </div>
       </motion.div>
