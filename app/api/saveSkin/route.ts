@@ -51,8 +51,7 @@ export async function POST(request: Request) {
       data: {
         name,
         wear,
-        value,
-        quantity: volume,
+        value: parseFloat(value),
         float: parsedFloat,
         pattern_id: parsedPatternId,
         stattrak: parsedStattrak,

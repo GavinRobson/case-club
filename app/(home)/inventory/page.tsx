@@ -42,11 +42,11 @@ const InventoryPage = async () => {
     net_earnings = user.earned! - user.spent!;
   }
 
-
+  const profit = net_earnings > 0;
   return ( 
     <div>
       <div className="hidden md:block ">
-        <span className={`w-full items-center flex justify-center pb-4 ${net_earnings > 0 ? 'text-green-500': 'text-red-500'}`}>Net Earnings: {net_earnings.toFixed(2)}</span>
+        <span className={`w-full items-center flex justify-center pb-4 ${profit ? 'text-green-500': 'text-red-500'}`}>Net Earnings: {!profit && "-"}${net_earnings.toFixed(2)}</span>
         <div className="w-screen h-full flex justify-center items-center mx-auto px-4">
           <div className="grid grid-flow-row grid-cols-6 gap-2 max-w-screen-xl justify-items-center">
             <Suspense fallback={

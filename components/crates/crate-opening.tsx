@@ -136,6 +136,7 @@ const CrateOpening = ({ skins, crateValue }: { skins: any, crateValue: number })
     try {
       const response = await fetch(`/api/getSkinValue?skin=${skinInfo.hash_name}`)
       const data = await response.json();
+      console.log(data)
       if (response.ok) {
         setValue(data.value)
       } else {
@@ -238,7 +239,7 @@ const CrateOpening = ({ skins, crateValue }: { skins: any, crateValue: number })
         {(selectedItem && show) && <WearBar float={skinInfo.float}/>}
         {(selectedItem && show) && <span className='pt-1'>Pattern ID: {skinInfo.pattern_id}</span>}
         {(gettingValue && show) && <Loader2 className='animate-spin'/>}
-        {(value && show) && <span>Value: {value}</span>}
+        {(value && show) && <span>Value: ${value}</span>}
         <button
           className={`px-6 py-2 text-lg font-semibold rounded-md ${rollState.rolling ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} text-white`}
           onClick={startRoll}

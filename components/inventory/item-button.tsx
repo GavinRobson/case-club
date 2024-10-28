@@ -27,12 +27,12 @@ const ItemButton = ({ item }: Props) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="flex flex-col items-center flex-grow min-w-[150px]">
+      <div className="flex flex-col items-center flex-grow min-w-[200px]">
         <Image src={item.image} alt="Item" height={size} width={size} className="drop-shadow-lg" />
         <span>{item.name}</span>
         <span className="text-orange-400">{item.stattrak ? 'StatTrak™' : ' '}</span>
       </div>
-      <span>{item.value}</span>
+      <span className="pb-2 text-lg">${item.value.toFixed(2)}</span>
       <Button
         variant="steam"
         className="mb-2 flex"

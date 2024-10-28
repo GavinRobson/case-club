@@ -9,14 +9,19 @@ export async function GET(request: Request) {
   }
 
   try {
-    const response = await fetch (`https://steamcommunity.com/market/priceoverview/?currency=1&appid=730&market_hash_name=${market_hash_name}`)
-    const skin = await response.json();
-    console.log(response);
-    if (!skin) {
-      return NextResponse.json({ message: 'Skin not found' }, { status: 404 });
+    const response = await fetch(`https://api.dmarket.com/exchange/v1/market/items?title=${market_hash_name}&gameId=a8db&limit=1&currency=USD`)
+    if (!response.ok) {
+      return NextResponse.json({ message: 'Failed to fetch skin from DMarket' }, { status: response.status });
     }
 
-    return NextResponse.json({ value: skin.median_price, volume: skin.volume })
+    const skin = await response.json();
+    if (!skin || !skin.objects || skin.objects.length === 0) {
+      return NextResponse.json({ value: 0.00 });
+    }
+    
+    const price = ((skin.objects[0].suggestedPrice.USD / 100) * .80).toFixed(2)
+    console.log(price)
+    return NextResponse.json({ value: price })
   } catch (error: any) {
     return NextResponse.json({ message: 'Error fetching skin value' }, { status: 500 })
   }

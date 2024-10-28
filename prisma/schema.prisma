@@ -113,8 +113,7 @@ model InventorySkin {
   stattrak         Boolean
   market_hash_name String
   image            String
-  value            String?
-  quantity         String?
+  value            Float?
 
   opened_at  DateTime @default(now())
   updated_at DateTime @updatedAt

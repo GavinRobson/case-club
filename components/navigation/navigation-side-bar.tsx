@@ -11,7 +11,7 @@ const NavigationSideBar = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return ( 
-    <div className="px-4">
+    <div className="px-4 z-50">
       <button 
       onClick={toggleMenu}
         className="p-2 h-full flex items-center text-white"

@@ -35,7 +35,11 @@ export const getAllItems = async (id: string | undefined) => {
       include: {
         inventory: {
           include: {
-            inventorySkin: true
+            inventorySkin: {
+              orderBy: {
+                opened_at: 'asc'
+              }
+            }
           }
         }
       },
@@ -63,7 +67,7 @@ export const getTotalEarned = async (id: string | undefined) => {
     for (let i = 0; i < items.length; i++){
       if (items[i].value === null) continue;
 
-      const value = parseFloat(items[i].value!.replace(/[^0-9.]/g, ''));
+      const value = items[i].value!;
       totalEarned += value;
     } 
     await db.user.update({
