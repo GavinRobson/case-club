@@ -6,10 +6,8 @@ const fetcher = (url: any) => fetch(url).then((res) => res.json());
 
 export const UserStats = ({ userId }: {userId: string | undefined | null}) => {
   const { data, error } = useSWR(`/api/user-stats?id=${userId}`, fetcher, {
-    refreshInterval: 60000
+    refreshInterval: 5000
   });
-
-  console.log(data)
 
   if (error) return <div>Error loading data.</div>;
   if (!data) return <div>Loading...</div>
