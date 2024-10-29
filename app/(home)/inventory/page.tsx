@@ -4,6 +4,7 @@ import ItemButtonSkeleton from '@/components/inventory/item-button-skeleton'
 import { getAllItems } from '@/data/user';
 import { auth } from "@/auth";
 import NoItemRedirect from "@/components/inventory/no-item-redirect";
+import ResetInventoryButton from "@/components/inventory/reset-inventory-button";
 
 const InventoryPage = async () => {
   const session = await auth();
@@ -52,6 +53,7 @@ const InventoryPage = async () => {
         <div className="flex flex-row space-x-2">
         <span>Spent: ${user.spent?.toFixed(2)}</span>
         <span>Earned: ${user.earned?.toFixed(2)}</span>
+        <ResetInventoryButton />
         </div>
         <span className={`${profit ? 'text-green-500': 'text-red-500'}`}>Net Earnings: {!profit && "-"}${earnings.toFixed(2)}</span>
         </div>
