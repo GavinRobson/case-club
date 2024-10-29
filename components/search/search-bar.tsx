@@ -16,7 +16,7 @@ const SearchBar = () => {
     try {
       const response = await fetch(`/api/searchUsers?q=${encodeURIComponent(searchQuery)}`);
       const data = await response.json();
-      setResults(data);
+      setResults(data.users);
     } catch (error) {
       console.error('Error fetching users', error);
     }

@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   const q = searchParams.get('q')
 
   if (!q) {
-    return null;
+    return NextResponse.json({ message: 'Query required' }, {status: 401})
   }
 
   try {
@@ -24,7 +24,7 @@ export async function GET(request: Request) {
         earned: true
       }
     });
-    return NextResponse.json(users);
+    return NextResponse.json({users: users}, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: 'Failed to fetch users' }, { status: 500 })
   }
