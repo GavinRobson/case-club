@@ -2,6 +2,7 @@ import { CircleUser } from 'lucide-react';
 
 import { signOut } from '@/auth';
 import { UserStats } from '@/components/navigation/user-stats';
+import ViewProfileButton from '@/components/navigation/view-profile-button';
 
 type Props = {
   username: string | undefined | null;
@@ -28,6 +29,7 @@ export const LoggedInButton = ({ username, userId }: Props) => {
             <div className="text-white px-4 cursor-default">{username}</div>
             <hr className="w-full my-2 border-t border-[#808080]" />
             <UserStats userId={userId}/>
+            <ViewProfileButton username={username}/>
             <div className=" text-white/50 py-1 px-4 hover:text-white hover:bg-white/30 hover:outline hover:outline-1 cursor-pointer transition rounded-[0.25rem]">
               <button type="submit">Log Out</button>
             </div>

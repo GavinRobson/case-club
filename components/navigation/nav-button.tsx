@@ -20,7 +20,7 @@ export const NavButton = ({ href, label }: Props) => {
       size="sm"
       variant="outline"
       className={cn(
-        'min-w-36 h-1/2 bg-[#0e1015] hover:text-white border-neutral-700 hover:border-b-0 transition',
+        'min-w-36 h-1/2 bg-[#0e1015] hover:text-white border-neutral-700 transition hover:bg-[#13151b]',
         isActive ? 'bg-[#13151b] text-white' : 'text-[#45484e]'
       )}
     >

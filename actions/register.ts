@@ -4,7 +4,7 @@ import * as z from 'zod';
 import bcrypt from 'bcryptjs';
 
 import { db } from '@/lib/db';
-import { getUserByEmail } from '@/data/user';
+import { getUserByEmail, getUserByUsername } from '@/data/user';
 import { RegisterSchema } from '@/schemas';
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
@@ -23,11 +23,20 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: 'Email taken' };
   }
 
+  const usernameTaken = await getUserByUsername(username);
+
+
+  if (usernameTaken) {
+    return { error: 'Username taken' }
+  }
+
   const user = await db.user.create({
     data: {
       name: username,
       email,
       password: hashedPassword,
+      spent: 0.0,
+      earned: 0.0
     },
   });
 

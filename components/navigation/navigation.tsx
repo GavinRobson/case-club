@@ -13,6 +13,18 @@ const routes = [
     href: '/inventory',
     label: 'Inventory'
   },
+  {
+    href: '/history',
+    label: 'History'
+  },
+  {
+    href: '/leaderboard',
+    label: 'Leaderboard'
+  },
+  {
+    href: '/search',
+    label: 'Search'
+  }
 ];
 
 export const Navigation = async () => {
