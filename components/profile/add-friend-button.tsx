@@ -7,6 +7,7 @@ import { useState } from 'react';
 const AddFriendButton = ({ friendName }: {friendName: string}) => {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  
   const onClick = async () => {
     setIsLoading(true);
     const response = await fetch(`/api/add-friend`, {

@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import AddFriendButton from "@/components/profile/add-friend-button";
-import { checkFriends, getUserByUsername } from "@/data/user"
+import { checkFriends, getFriendsOfUser, getUserByUsername } from "@/data/user"
 import { UserCheck } from "lucide-react";
 
 export default async function ProfilePage({ params }: { params: { username: string } }) {

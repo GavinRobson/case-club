@@ -20,6 +20,7 @@ export async function POST(request: Request) {
       image,
       skin_id,
       crateValue,
+      case_id,
     } = await request.json();
 
     if (!name || !wear || !float || !pattern_id || !market_hash_name || !image) {
@@ -58,7 +59,8 @@ export async function POST(request: Request) {
         image,
         updated_at: new Date(),
         inventory_id: user.inventory.id,
-        skin_id, // Assuming 'name' represents the skin ID in this context
+        skin_id,
+        case_id
       },
     });
 

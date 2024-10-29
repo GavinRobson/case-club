@@ -77,7 +77,7 @@ model Case {
   value            Float?
 
   skins Skin[] @relation("CaseSkins")
-
+  inventorySkins InventorySkin[]
   updatedAt DateTime @updatedAt
 }
 
@@ -123,6 +123,9 @@ model InventorySkin {
 
   inventory    Inventory @relation(fields: [inventory_id], references: [id])
   inventory_id String
+
+  case Case @relation(fields: [case_id], references: [id])
+  case_id String
 
   skin    Skin   @relation(fields: [skin_id], references: [id])
   skin_id String

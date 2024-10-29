@@ -63,10 +63,10 @@ export const checkFriends = async (id: string | undefined, friendName: string | 
     });
 
     if (!user) {
-      return false;
+      return null;
     }
 
-    return true;
+    return user;
   } catch (error) {
     return null;
   }
@@ -87,6 +87,9 @@ export const getAllItems = async (id: string | undefined) => {
             inventorySkin: {
               orderBy: {
                 opened_at: 'asc'
+              },
+              include: {
+                case: true
               }
             }
           }
@@ -95,6 +98,32 @@ export const getAllItems = async (id: string | undefined) => {
     });
 
     return userItems;
+  } catch (error) {
+    return null;
+  }
+}
+
+export const getFriendsOfUser = async (id: string | undefined) => {
+  if (id === undefined) {
+    return null;
+  }
+
+  try {
+    const user = await db.user.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        friends: true,
+        friendOf: true
+      },
+    });
+
+    if (!user) {
+      return null;
+    }
+
+    return user;
   } catch (error) {
     return null;
   }

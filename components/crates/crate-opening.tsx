@@ -13,7 +13,7 @@ import saveSkins from '@/data/saveSkins';
 import { Button } from '../ui/button';
 import CrateItemButton from './crate-item-button';
 
-const CrateOpening = ({ skins, crateValue }: { skins: any, crateValue: number, }) => {
+const CrateOpening = ({ skins, crateValue, caseId }: { skins: any, crateValue: number, caseId: string }) => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [muted, setMuted] = useState(false);
@@ -124,7 +124,7 @@ const CrateOpening = ({ skins, crateValue }: { skins: any, crateValue: number, }
 
   useEffect(() => {
     if (openedSkins[0]?.skin && save) {
-      saveSkins(openedSkins[0].skin, openedSkins[0].wear, openedSkins[0].float, openedSkins[0].pattern_id, openedSkins[0].stattrak, openedSkins[0].market_hash_name, crateValue)
+      saveSkins(openedSkins[0].skin, openedSkins[0].wear, openedSkins[0].float, openedSkins[0].pattern_id, openedSkins[0].stattrak, openedSkins[0].market_hash_name, crateValue, caseId)
     }
   }, [openedSkins])
 

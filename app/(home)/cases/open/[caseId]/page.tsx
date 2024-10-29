@@ -40,7 +40,7 @@ const OpenCasePage = async ({ params }: { params: { caseId: string } }) => {
               </div>
             </div>
             <div className="w-full justify-end mt-auto">
-              <CrateOpening skins={crate.skins} crateValue={crate.value} />
+              <CrateOpening skins={crate.skins} crateValue={crate.value} caseId={crate.id}/>
             </div>
           </div>
         </div>

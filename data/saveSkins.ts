@@ -8,6 +8,7 @@ export default async function saveSkins(
   stattrak: boolean, 
   market_hash_name: string, 
   crateValue: number,
+  case_id: string
 ) {
 
   let image = ""
@@ -36,6 +37,7 @@ export default async function saveSkins(
         image,
         skin_id: skin.id,
         crateValue,
+        case_id
       });
 
       console.log('Skin saved successfully:', response.data);
