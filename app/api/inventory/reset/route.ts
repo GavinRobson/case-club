@@ -27,6 +27,18 @@ export async function POST(request: Request) {
         inventory_id: inventory.id
       }
     })
+
+    await db.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        spent: 0,
+        earned: 0
+      }
+    })
+
+    return NextResponse.json({ message: 'Success' }, { status: 200 })
   } catch (error) {
     return NextResponse.json({ error: 'Failed reseting inventory' }, { status: 500 })
   }
