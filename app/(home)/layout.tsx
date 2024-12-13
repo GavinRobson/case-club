@@ -14,7 +14,7 @@ export default function HomePageLayout({ children }: Props) {
       <MobileHeader />
       <Chat />
       <div className="flex flex-col min-h-screen">
-        <main>{children}</main>
+        <main className="flex-grow">{children}</main>
       </div>
       <Footer />
     </>

@@ -46,15 +46,17 @@ const InventoryPage = async () => {
   const profit = net_earnings > 0;
   return ( 
     <div>
-      <div className="hidden md:block ">
+      <div className="hidden md:block">
         <div className="flex flex-col w-full items-center justify-center">
-
-        <div className="flex flex-row space-x-2">
+        <h1 className="text-3xl">Inventory</h1>
+        <div className="flex flex-row space-x-4 pt-4 items-center">
         <span>Spent: ${user.spent?.toFixed(2)}</span>
         <span>Earned: ${user.earned?.toFixed(2)}</span>
-        <ResetInventoryButton />
-        </div>
         <span className={`${profit ? 'text-green-500': 'text-red-500'}`}>Net Earnings: {!profit && "-"}${earnings.toFixed(2)}</span>
+        </div>
+        <div className="py-6">
+          <ResetInventoryButton />
+        </div>
         </div>
         <div className="w-screen h-full flex justify-center items-center mx-auto px-4">
           <div className="grid grid-flow-row grid-cols-6 gap-2 max-w-screen-xl justify-items-center">
@@ -70,7 +72,14 @@ const InventoryPage = async () => {
           </div>
         </div>
       </div>
-      <div className="w-full h-full flex md:hidden justify-center mx-auto">
+      <div className="w-full h-full flex flex-col md:hidden justify-center items-center mx-auto space-y-4">
+          <h1 className="text-xl">Inventory</h1>
+          <div className="flex flex-row space-x-2">
+            <span>Earned: ${user.earned?.toFixed(2)}</span>
+            <span>Spent: ${user.spent?.toFixed(2)}</span>
+          </div>
+          <span className={`${profit ? 'text-green-500': 'text-red-500'}`}>Net Earnings: {!profit && "-"}${earnings.toFixed(2)}</span>
+          <ResetInventoryButton />
         <div className="flex flex-col space-y-2">
             <Suspense fallback={
               Array.from({ length: 2 }).map((_, index) => (

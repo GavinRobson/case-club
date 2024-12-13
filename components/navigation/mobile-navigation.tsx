@@ -6,13 +6,17 @@ const routes = [
     label: 'Cases'
   },
   {
-    href: '/battles',
-    label: 'Battles'
-  },
-  {
     href: '/inventory',
     label: 'Inventory'
   },
+  {
+    href: '/history',
+    label: 'History'
+  },
+  {
+    href: '/search',
+    label: 'Search'
+  }
 ];
 
 const MobileNavigation = () => {

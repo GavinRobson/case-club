@@ -59,7 +59,7 @@ const Chat = () => {
         {modalOpen ? (
           <motion.div
             key="chat-modal"
-            className="fixed w-1/4 h-1/2 bottom-5 right-5 bg-[#2B3A67] rounded-md z-50"
+            className="fixed md:w-1/4 w-3/4 h-1/2 bottom-5 right-5 bg-[#2B3A67] rounded-md z-50"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}

@@ -3,8 +3,7 @@ import { auth } from '@/auth';
 
 import { LoggedInButton } from '@/components/navigation/logged-in-button';
 import { SignInButton } from '@/components/navigation/sign-in-button';
-import { getTotalEarned } from '@/data/user';
-import { db } from '@/lib/db';
+import LoggedInMobile from './logged-in-mobile';
 
 export const ProfileButton = async () => {
   const session = await auth();
@@ -21,8 +20,11 @@ export const ProfileButton = async () => {
 
   return (
       <div className='flex items-center ml-auto px-5 h-full z-50'>
-        <div>
+        <div className='md:block hidden'>
           <LoggedInButton username={session.user?.name} userId={session?.user?.id}/>
+        </div>
+        <div className='md:hidden block'>
+          <LoggedInMobile username={session?.user?.name}/>
         </div>
       </div>
   )

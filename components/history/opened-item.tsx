@@ -3,7 +3,7 @@ import WearBar from "@/components/crates/wear-bar";
 
 const OpenedItem = (item: any) => {
   return ( 
-    <div className="w-1/2 bg-slate-600 min-h-20 rounded-lg flex flex-row items-center justify-between p-2">
+    <div className="md:w-1/2 w-3/4 bg-slate-600 min-h-20 rounded-lg flex md:flex-row flex-col items-center justify-between p-2">
       <Image src={item.item.image} alt="skin" height={100} width={100}/>
       <div className="flex flex-col items-center justify-center">
         <span>({item.item.wear})</span>

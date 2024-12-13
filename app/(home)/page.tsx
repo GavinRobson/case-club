@@ -4,16 +4,16 @@ import { auth } from "@/auth";
 export default async function Home() {
   const session = await auth();
   return (
-    <div className="flex flex-col w-screen h-screen items-center justify-start pt-4 pb-6">
-      <h1 className="text-4xl">Welcome to Case Club</h1>
-      <div className="w-1/2 grid grid-flow-row grid-cols-2 gap-6 pt-4 h-auto">
+    <div className="flex flex-col w-screen h-auto items-center justify-start pt-4 pb-6">
+      <h1 className="md:text-4xl text-3xl">Welcome to Case Club</h1>
+      <div className="md:w-1/2 w-3/4 grid grid-flow-row md:grid-cols-2 sm:grid-cols-1  gap-6 pt-4 h-auto">
         <Information 
           header="How it works"
-          content="Browse all cases in the 'Cases' tab, select one that interests you, and get to opening!"
+          content="Browse all cases in the 'Cases' tab, select one that interests you, and get to opening! View your open history in the 'History' tab. View your entire inventory in the 'Inventory' tab."
         />
         {session === null && (
           <Information 
-            header="Sign in for a better experience"
+            header="Sign in for a better experience!"
             content="By creating an account, you will be able to view your opening history, inventory, add friends, and more!"
           />
         )}
@@ -27,7 +27,11 @@ export default async function Home() {
         />
         <Information 
           header="Is this site true to the game?"
-          content="Yes! This site uses the odds from the official game. A knife is just as rare on this site as it is in Counter-Strike."
+          content="Yes! This site uses the odds from the official game that were released with the Perfect World update. For example, a knife is just as rare on this site as it is in Counter-Strike."
+        />
+        <Information 
+          header="Try our AI chat bot!"
+          content="If you ever have any questions about cases, skins, rare patterns, or more, consider asking our chat bot located in the bottom right corner of the screen. Our chatbot is powered by OpenAI and is automatically programmed to give you the best data about the Counter-Strike market."
         />
         <Information 
           header="About the developer"

@@ -35,9 +35,9 @@ const SearchBar = () => {
         placeholder="Search by username..."
         value={q}
         onChange={handleChange}
-        className="p-2 bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-lg w-1/2"
+        className="p-2 bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400 rounded-lg md:w-1/2 w-3/4"
       />
-      <ul className="pt-2 flex flex-col space-y-2 w-1/2">
+      <ul className="pt-2 flex flex-col space-y-2 md:w-1/2 w-3/4">
         {results.map((user: any, index: number) => (
           <SearchUserButton user={user} key={index}/>
         ))}

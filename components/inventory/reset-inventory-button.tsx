@@ -35,7 +35,7 @@ const ResetInventoryButton = () => {
   }
 
   return ( 
-    <div className="pl-10">
+    <div>
       <Button
         variant='destructive'
         onClick={onClick}
