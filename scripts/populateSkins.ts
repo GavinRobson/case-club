@@ -66,8 +66,5 @@ export const populateSkins = async () => {
         }
       }
     });
-    console.log(`${skin}`)
   }
-
-  console.log('Done')
 }

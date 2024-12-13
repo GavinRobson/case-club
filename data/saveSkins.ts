@@ -40,7 +40,6 @@ export default async function saveSkins(
         case_id
       });
 
-      console.log('Skin saved successfully:', response.data);
     } catch (error: any) {
       console.error('Error saving skin:', error.response.data);
     }

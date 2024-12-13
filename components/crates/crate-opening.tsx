@@ -48,7 +48,6 @@ const CrateOpening = ({ skins, crateValue, caseId }: { skins: any, crateValue: n
       weaponSkins.push(skin)
     }
   })
-  console.log(weaponSkins)
 
   const changeMute = () => {
     setMuted(!muted);

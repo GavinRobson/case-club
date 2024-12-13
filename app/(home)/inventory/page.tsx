@@ -17,7 +17,6 @@ const InventoryPage = async () => {
   }
 
   const user = await getAllItems(session.user?.id);
-  console.log(user)
   if (!user) {
     return (
       <div>

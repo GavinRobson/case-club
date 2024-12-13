@@ -45,8 +45,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    console.log(user?.inventory.id);
-
     await db.inventorySkin.create({
       data: {
         name,

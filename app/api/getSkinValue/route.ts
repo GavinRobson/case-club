@@ -20,7 +20,6 @@ export async function GET(request: Request) {
     }
     
     const price = ((skin.objects[0].suggestedPrice.USD / 100)).toFixed(2)
-    console.log(price)
     return NextResponse.json({ value: price })
   } catch (error: any) {
     return NextResponse.json({ message: 'Error fetching skin value' }, { status: 500 })

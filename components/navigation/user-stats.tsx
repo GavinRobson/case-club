@@ -14,9 +14,6 @@ export const UserStats = ({ userId }: {userId: string | undefined | null}) => {
     refreshInterval: 5000
   });
 
-  console.log(data)
-  console.log(error)
-
   if (error) return <div>Error loading data.</div>;
   if (!data) return <div>Loading...</div>
 

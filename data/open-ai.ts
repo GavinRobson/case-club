@@ -15,14 +15,11 @@ export default async function getAiMessage(messages: Message[]) {
     ...messages
   ]
 
-  console.log(allMessages)
-
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: allMessages
     });
-    console.log(response)
     return response;
   } catch (error) {
     console.error(error)

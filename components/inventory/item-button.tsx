@@ -27,7 +27,6 @@ const ItemButton = ({ item }: Props) => {
     if (item.wear === 'Well-Worn') wearColor = 'text-orange-500';
     if (item.wear === 'Battle-Scarred') wearColor = 'text-red-500';
 
-    console.log(wearColor)
     return ( 
     <div
       className="flex flex-col min-h-[250px] bg-slate-700 items-center justify-center hover:bg-slate-600 transition w-full"

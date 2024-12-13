@@ -44,7 +44,6 @@ const Chat = () => {
         return;
       };
       setMessages([...messages, {role: 'user', content: message}, {role: 'assistant', content: response?.choices[0].message.content}]);
-      console.log(response?.choices[0].message.content)
     } catch (error: any) {
       setError(error)
     } finally {

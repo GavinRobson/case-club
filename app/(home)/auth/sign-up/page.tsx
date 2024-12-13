@@ -41,7 +41,6 @@ const SignUpPage = () => {
       password: '',
     },
   });
-  console.log(form.getFieldState('email'));
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
     setError('');

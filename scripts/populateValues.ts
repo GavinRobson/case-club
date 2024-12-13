@@ -12,7 +12,6 @@ export const populateCaseValues = async () => {
         const caseName = cases[i].name.replace("&", "%26");
         const response = await fetch(`https://steamcommunity.com/market/priceoverview/?currency=1&appid=730&market_hash_name=${caseName}`);
         const data = await response.json();
-        console.log(data)
         const price = data.median_price.replace("$", "");
         const crate = await db.case.update({
           where: {
@@ -24,7 +23,6 @@ export const populateCaseValues = async () => {
         })
 
         success = true;
-        console.log(crate)
       } catch (error) {
         console.error(error)
         retries--;
