@@ -283,7 +283,7 @@ const CrateOpening = ({ skins, crateValue, caseId }: { skins: any, crateValue: n
         </div>
         <div className='w-full flex flex-col items-center justify-center p-6 pt-56'>
             <div className={'w-[1000px] overflow-hidden border-2 border-gray-300 rounded-lg mb-4 items-center justify-center transition h-[154px]'}>
-              <Separator className={cn('absolute bg-orange-200 origin-center left-[50%] z-50 h-[152px]',  (!rollState.rolling && !rollState.rolled) && 'hidden')} orientation='vertical'/>
+              <Separator className={cn('absolute bg-orange-200 origin-center left-[50%] z-40 h-[152px]',  (!rollState.rolling && !rollState.rolled) && 'hidden')} orientation='vertical'/>
               <motion.div 
                 className='flex'
                 animate={{

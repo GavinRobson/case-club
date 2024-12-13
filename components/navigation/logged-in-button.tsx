@@ -13,7 +13,7 @@ export const LoggedInButton = ({ username, userId }: Props) => {
 
   return (
     <div className="relative group">
-      <div className="text-gray-600 group-hover:text-gray-400 transition cursor-pointer peer z-99">
+      <div className="text-gray-600 group-hover:text-gray-400 transition cursor-pointer peer z-50">
         <CircleUser />
       </div>
       <div className="bg-[#262830] hidden min-w-[162px] peer-hover:flex group-hover:flex absolute right-0 mt-2 shadow-lg rounded-[0.25rem]">

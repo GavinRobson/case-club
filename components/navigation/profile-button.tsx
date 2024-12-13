@@ -19,12 +19,6 @@ export const ProfileButton = async () => {
     )
   }
 
-  const user = await db.user.findUnique({
-    where: {
-      id: session?.user?.id,
-    }
-  })
-
   return (
       <div className='flex items-center ml-auto px-5 h-full z-50'>
         <div>

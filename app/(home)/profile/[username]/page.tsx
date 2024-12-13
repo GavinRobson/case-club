@@ -43,9 +43,9 @@ export default async function ProfilePage({ params }: { params: { username: stri
           </div>
         )}
       </div>
-      <span>Total Spent: {user.spent}</span>
-      <span>Total Earned: {user.earned}</span>
-      <span className={`text-green-500 ${!profit && 'text-red-500'}`}>Net Earnings: {profit ? `$${net_earnings}` : `-$${Math.abs(net_earnings)}`}</span>
+      <span>Total Spent: ${user.spent}</span>
+      <span>Total Earned: ${user.earned}</span>
+      <span className={`text-green-500 ${!profit && 'text-red-500'}`}>Net Earnings: {profit ? `$${net_earnings.toFixed(2)}` : `-$${Math.abs(net_earnings).toFixed(2)}`}</span>
     </div>
   )
 }
