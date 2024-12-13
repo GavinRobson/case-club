@@ -4,7 +4,7 @@ type Props = {
 
 export default function InventoryLayout({ children }: Props) {
   return (
-    <div className="pt-4">
+    <div className="py-4">
       {children}
     </div>
   );
