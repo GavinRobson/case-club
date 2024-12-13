@@ -1,16 +1,22 @@
 'use client';
 
-import { Divide, MessageSquareMore, X } from "lucide-react";
+import { MessageSquareMore, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import getAiMessage from "@/data/open-ai";
+
+type Message = {
+  role: 'system' | 'user' | 'assistant';
+  content: string;
+  name?: string;
+}
 
 const Chat = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [message, setMessage] = useState('')
   const [loading, setloading] = useState(false);
   const [error, setError] = useState("");
-  const [messages, setMessages] = useState<string[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
 
   const onClick = () => {
     setModalOpen(!modalOpen);
@@ -32,12 +38,12 @@ const Chat = () => {
     setError('');
 
     try {
-      const response = await getAiMessage(message);
+      const response = await getAiMessage([...messages, {role: 'user', content: message}]);
       if (response?.choices[0].message.content === null || response?.choices[0].message.content === undefined) {
         setError('OOPSIE')
         return;
       };
-      setMessages([...messages, message, response?.choices[0].message.content]);
+      setMessages([...messages, {role: 'user', content: message}, {role: 'assistant', content: response?.choices[0].message.content}]);
       console.log(response?.choices[0].message.content)
     } catch (error: any) {
       setError(error)
@@ -53,29 +59,33 @@ const Chat = () => {
         {modalOpen ? (
           <motion.div
             key="chat-modal"
-            className="fixed w-1/4 h-1/2 bottom-5 right-5 bg-gray-600 rounded-md z-50"
+            className="fixed w-1/4 h-1/2 bottom-5 right-5 bg-[#2B3A67] rounded-md z-50"
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
             transition={{ duration: 0.3 }}
           >
-            <X
-              onClick={onClick}
-              className="absolute text-black top-2 right-2 cursor-pointer hover:bg-white rounded-full transition-all"
-            />
-            <div 
-              onClick={handleClear}
-              className="absolute text-black top-2 left-2 h-auto p-2 rounded-full justify-center hover:bg-white cursor-pointer transition-all"
-            >
-              Clear
+            <div className="flex flex-row items-center justify-between">
+              <div 
+                onClick={handleClear}
+                className=" text-[#F0EDE5] hover:text-[#a19f9a] h-auto m-4 justify-center cursor-pointer transition-all"
+                >
+                Clear
+              </div>
+              <h1 className="h-auto text-2xl flex justify-center items-center p-2 text-[#F0EDE5]">
+                Chat
+              </h1>
+              <X
+                onClick={onClick}
+                className=" text-[#F0EDE5] m-4 cursor-pointer hover:bg-white/10 hover:text-[#a19f9a] rounded-full transition-all"
+              />
             </div>
-            <h1 className="w-full h-auto text-2xl flex justify-center items-center p-2">Chat</h1>
             {error && <p className="text-red-500">{error}</p>}
             {messages && (
                 <div className="flex flex-col space-y-2 overflow-y-auto h-2/3 p-6 rounded-lg max-h-full">
-                  {messages.map((message, i) => (
-                    <div className={`w-full ${i % 2 === 0 && 'justify-end'} flex`}>
-                      <p className={`flex items-center w-auto h-auto p-4 text-black rounded-lg ${i % 2 === 0 ? 'text-white bg-gradient-to-b from-blue-400 to-blue-500' : 'text-white bg-gradient-to-b from-teal-400 to-teal-500'}`}>{message}</p>
+                  {messages.map((message) => (
+                    <div className={`w-full ${message.role === 'user' && 'justify-end'} flex`}>
+                      <p className={`flex items-center w-auto h-auto p-4 text-black rounded-lg shadow-sm border ${message.role === 'user' ? 'text-white bg-gradient-to-b from-emerald-400 to-emerald-500 border-emerald-600' : 'text-white bg-gradient-to-b from-gray-600 to-gray-700 border-gray-800'}`}>{message.content}</p>
                     </div>
                   ))}
                   {loading && (

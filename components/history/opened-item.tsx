@@ -13,11 +13,11 @@ const OpenedItem = (item: any) => {
         <span>Float: {item.item.float}</span>
         <WearBar float={item.item.float}/>
       </div> 
-      <span>Value: {`$${item.item.value}`}</span>
+      <span>Value: {`$${item.item.value.toFixed(2)}`}</span>
       <div className="flex flex-col space-y-1 items-center justify-center">
         <Image src={item.item.case.image} alt="case" height={50} width={50}/>
         <span>{item.item.case.name}</span>
-        <span>Cost: {`$${item.item.case.value}`}</span>
+        <span>Cost: {`$${item.item.case.value.toFixed(2)}`}</span>
       </div>
     </div>
    );

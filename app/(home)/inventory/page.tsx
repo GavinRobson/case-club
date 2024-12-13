@@ -5,15 +5,14 @@ import { getAllItems } from '@/data/user';
 import { auth } from "@/auth";
 import NoItemRedirect from "@/components/inventory/no-item-redirect";
 import ResetInventoryButton from "@/components/inventory/reset-inventory-button";
+import RedirectToSignIn from "@/components/navigation/redirect-to-sign-in";
 
 const InventoryPage = async () => {
   const session = await auth();
 
   if (!session) {
     return (
-      <div>
-        Sign In
-      </div>
+      <RedirectToSignIn page='inventory' />
     )
   }
 

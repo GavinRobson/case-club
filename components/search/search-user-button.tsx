@@ -17,7 +17,7 @@ const SearchUserButton = ({user}: Props) => {
     >
       <div className="flex flex-row justify-between w-full p-2">
         <span className="text-xl hover:underline">{user.name}</span>
-        <span>Spent: ${user.spent}</span>
+        <span>Spent: ${user.spent.toFixed(2)}</span>
         <span>Earned: ${user.earned}</span>
       </div>
     </div>

@@ -5,10 +5,10 @@ const routes = [
     href: '/cases',
     label: 'Cases'
   },
-  {
-    href: '/battles',
-    label: 'Battles'
-  },
+  // {
+  //   href: '/battles',
+  //   label: 'Battles'
+  // },
   {
     href: '/inventory',
     label: 'Inventory'
@@ -17,10 +17,10 @@ const routes = [
     href: '/history',
     label: 'History'
   },
-  {
-    href: '/leaderboard',
-    label: 'Leaderboard'
-  },
+  // {
+  //   href: '/leaderboard',
+  //   label: 'Leaderboard'
+  // },
   {
     href: '/search',
     label: 'Search'

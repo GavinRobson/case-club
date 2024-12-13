@@ -1,3 +1,4 @@
+import Footer from "@/components/navigation/footer";
 import Header from "@/components/navigation/header";
 import MobileHeader from "@/components/navigation/mobile-header";
 import Chat from "@/components/ui/chat";
@@ -12,7 +13,10 @@ export default function HomePageLayout({ children }: Props) {
       <Header />
       <MobileHeader />
       <Chat />
-      <main>{children}</main>
+      <div className="flex flex-col min-h-screen">
+        <main>{children}</main>
+      </div>
+      <Footer />
     </>
   )
 }

@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import OpenedItem from "@/components/history/opened-item";
 import NoItemRedirect from "@/components/inventory/no-item-redirect";
+import RedirectToSignIn from "@/components/navigation/redirect-to-sign-in";
 import { getAllItems } from "@/data/user";
 
 const HistoryPage = async () => {
@@ -8,9 +9,7 @@ const HistoryPage = async () => {
 
   if (!session) {
     return (
-      <div>
-        Sign in to see history!
-      </div>
+      <RedirectToSignIn page='history'/>
     )
   }
   const openedSkins = await getAllItems(session?.user?.id);
