@@ -17,6 +17,10 @@ const routes = [
     href: '/history',
     label: 'History'
   },
+  {
+    href: '/friends',
+    label: 'Friends'
+  },
   // {
   //   href: '/leaderboard',
   //   label: 'Leaderboard'

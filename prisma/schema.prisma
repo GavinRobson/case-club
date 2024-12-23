@@ -19,6 +19,7 @@ model User {
   name          String?   @unique
   email         String?   @unique
   image         String?
+  biography     String?
   emailVerified DateTime?
   password      String?
   createdAt     DateTime  @default(now())
@@ -26,8 +27,8 @@ model User {
   spent         Float?
   earned        Float?
 
-  friends  User[]   @relation("UserFriends", map: "UserFriends_friends")
-  friendOf User[]   @relation("UserFriends", map: "UserFriends_friendOf")
+  friends  User[] @relation("UserFriends", map: "UserFriends_friends")
+  friendOf User[] @relation("UserFriends", map: "UserFriends_friendOf")
 
   account Account[]
 
@@ -76,9 +77,9 @@ model Case {
   model_player     String?
   value            Float?
 
-  skins Skin[] @relation("CaseSkins")
+  skins          Skin[]          @relation("CaseSkins")
   inventorySkins InventorySkin[]
-  updatedAt DateTime @updatedAt
+  updatedAt      DateTime        @updatedAt
 }
 
 model Skin {
@@ -124,7 +125,7 @@ model InventorySkin {
   inventory    Inventory @relation(fields: [inventory_id], references: [id])
   inventory_id String
 
-  case Case @relation(fields: [case_id], references: [id])
+  case    Case   @relation(fields: [case_id], references: [id])
   case_id String
 
   skin    Skin   @relation(fields: [skin_id], references: [id])

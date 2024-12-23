@@ -103,6 +103,7 @@ export const getAllItems = async (id: string | undefined) => {
   }
 }
 
+
 export const getFriendsOfUser = async (id: string | undefined) => {
   if (id === undefined) {
     return null;
